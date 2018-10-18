@@ -34,3 +34,4 @@
 grpc
 grpc_helloworld/intermediate
 grpc_helloworld/packages
+grpc_helloworld/cmake_externalproject/.build
