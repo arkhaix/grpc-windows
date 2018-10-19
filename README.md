@@ -1,50 +1,42 @@
 # grpc-windows
-Build gRPC on Windows x64
+Build gRPC on Windows with Visual Studio 2017
 
-# gRPC?
+# gRPC
 [gRPC - An RPC library and framework](http://github.com/grpc/grpc)
 
+# Version
+This repo currently builds *_gRPC v1.15.x._*
+If you need a newer version, [BUILDING.md](https://github.com/grpc/grpc/blob/master/BUILDING.md) contains up-to-date instructions for building manually, which you should be able to adapt for this repo.
+
 # Requirements
+Visual Studio 2017
+
 [Git](https://git-scm.com)
 
 [CMake](https://cmake.org/)
 
-Visual Studio 2015
+[Chocolatey](https://chocolatey.org/)
 
-# Build on windows
+# Build gRPC
+From an administrator command prompt:
 ```
-grpc_clone.bat
-grpc_build.bat
-```
-
-# Build output
-```
-grpc\bin\grpc\debug
-grpc\bin\grpc\release
-grpc\bin\protobuf\debug
-grpc\bin\protobuf\release
+prereqs.bat
 ```
 
-# Test grpc_helloworld
+From any command prompt:
 ```
-run test_protoc.bat
-open grpc_helloworld.sln
-build solution
-run server.exe and client.exe
+clone.bat
+build.bat
 ```
 
-# Use grpc
-
-## Install Nuget Package
+# Build helloworld example
+Build gRPC first, then:
 ```
-grpc.dependencies.openssl
-grpc.dependencies.openssl.redist
-grpc.dependencies.zlib
-grpc.dependencies.zlib.redist
+grpc_helloworld\build.bat
 ```
 
-## Example include or link lib
+# Run helloworld example
+Build helloworld first, then:
 ```
-grpc_helloworld\projects\lib_debug.props
-grpc_helloworld\projects\lib_release.props
+grpc_helloworld\run_helloworld.bat
 ```
