@@ -12,7 +12,7 @@ robocopy ../grpc/.build/third_party/boringssl/ssl/Release ./boringssl/lib ssl.li
 cd cmake_externalproject
 mkdir .build
 cd .build
-cmake .. -G "Visual Studio 15 2017"
+cmake .. -G "Visual Studio 15 2017 Win64"
 cmake --build . --config Release
 
 rem Copy zlib from the grpc build

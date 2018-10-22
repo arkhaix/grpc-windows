@@ -3,8 +3,8 @@
 pushd "%~dp0"
 
 cd grpc
-md .build && cd .build
-cmake .. -G "Visual Studio 15 2017"
+md .build & cd .build
+cmake .. -G "Visual Studio 15 2017 Win64"
 cmake --build . --config Release
 
 @rem Building with Ninja (choco install ninja) is supposedly faster, but I haven't tested it
@@ -19,4 +19,3 @@ cmake --build . --config Release
 
 popd
 endlocal
-pause
