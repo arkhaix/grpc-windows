@@ -28,6 +28,13 @@ clone.bat
 build.bat
 ```
 
+# Export gRPC and protobuf
+From any command prompt:
+```
+export.bat
+```
+The _export_ folder will contain lib, bin, and include for gRPC and protobuf.
+
 # Build helloworld example
 Build gRPC first, then:
 ```

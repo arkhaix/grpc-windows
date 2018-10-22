@@ -16,12 +16,12 @@ rem "%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -In
 
 rem Install prereqs
 rem (activeperl hangs for me, but seems to work anyway?)
-choco install activeperl
-choco install golang
-choco install yasm
+choco install -y activeperl
+choco install -y golang
+choco install -y yasm
 
 rem Ninja is optional, not used by these build scripts
-rem choco install ninja
+rem choco install -y ninja
 
 popd
 endlocal

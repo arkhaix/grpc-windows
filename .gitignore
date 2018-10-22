@@ -30,9 +30,12 @@
 *.out
 *.app
 
-# Directory
+# Cloned gRPC
 grpc
+
+# Other build artifacts
 grpc_helloworld/intermediate
 grpc_helloworld/packages
 grpc_helloworld/cmake_externalproject/.build
 boringssl
+export
