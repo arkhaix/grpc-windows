@@ -9,7 +9,7 @@ echo #### git clone
 @rem powershell git clone --recursive -b ((New-Object System.Net.WebClient).DownloadString(\"https://grpc.io/release\").Trim()) https://github.com/grpc/grpc
 
 @rem This is the current latest and is known to be working
-call git clone --recursive -b v1.15.x https://github.com/grpc/grpc
+call git clone --recursive -b v1.17.0-pre2 https://github.com/grpc/grpc
 
 cd grpc
 call git submodule update --init

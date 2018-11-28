@@ -18,6 +18,7 @@
 
 #include <iostream>
 #include <memory>
+#include <sstream>
 #include <string>
 
 #include <grpcpp/grpcpp.h>
@@ -31,6 +32,7 @@
 using grpc::Server;
 using grpc::ServerBuilder;
 using grpc::ServerContext;
+using grpc::ServerReader;
 using grpc::Status;
 using helloworld::HelloRequest;
 using helloworld::HelloReply;
@@ -38,10 +40,21 @@ using helloworld::Greeter;
 
 // Logic and data behind the server's behavior.
 class GreeterServiceImpl final : public Greeter::Service {
-  Status SayHello(ServerContext* context, const HelloRequest* request,
+  Status SayHello(ServerContext* context, ServerReader<HelloRequest>* reader,
                   HelloReply* reply) override {
-    std::string prefix("Hello ");
-    reply->set_message(prefix + request->name());
+    int num_requests = 0;
+    std::string last_seen_name = "";
+
+    HelloRequest request;
+    while(reader->Read(&request)) {
+      num_requests++;
+      last_seen_name = request.name();
+    }
+
+    std::ostringstream os;
+    os << "Hello " << last_seen_name << ". " << num_requests << " requests received";
+    reply->set_message(os.str());
+
     return Status::OK;
   }
 };

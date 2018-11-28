@@ -30,6 +30,7 @@
 
 using grpc::Channel;
 using grpc::ClientContext;
+using grpc::ClientWriter;
 using grpc::Status;
 using helloworld::HelloRequest;
 using helloworld::HelloReply;
@@ -42,29 +43,36 @@ class GreeterClient {
 
   // Assembles the client's payload, sends it and presents the response back
   // from the server.
-  std::string SayHello(const std::string& user) {
-    // Data we are sending to the server.
+  std::string SayHello(const std::string& user, int num_outer_loops, int num_requests) {
     HelloRequest request;
     request.set_name(user);
 
-    // Container for the data we expect from the server.
     HelloReply reply;
 
-    // Context for the client. It could be used to convey extra information to
-    // the server and/or tweak certain RPC behaviors.
-    ClientContext context;
+    std::string last_reply;
+    for(int i = 0; i < num_outer_loops; i++) {
+      ClientContext context;
+      std::unique_ptr<ClientWriter<HelloRequest> > writer(
+        stub_->SayHello(&context, &reply));
 
-    // The actual RPC.
-    Status status = stub_->SayHello(&context, request, &reply);
+      for(int j = 0; j < num_requests; j++) {
+        if(!writer->Write(request)) {
+          std::cerr << "Broken stream" << std::endl;
+          break;
+        }
+      }
 
-    // Act upon its status.
-    if (status.ok()) {
-      return reply.message();
-    } else {
-      std::cout << status.error_code() << ": " << status.error_message()
-                << std::endl;
-      return "RPC failed";
+      writer->WritesDone();
+      Status status = writer->Finish();
+      if(status.ok()) {
+        last_reply = reply.message();
+      } else {
+        std::cerr << status.error_code() << ": " << status.error_message()
+                  << std::endl;
+      }
     }
+
+    return last_reply;
   }
 
  private:
@@ -72,14 +80,10 @@ class GreeterClient {
 };
 
 int main(int argc, char** argv) {
-  // Instantiate the client. It requires a channel, out of which the actual RPCs
-  // are created. This channel models a connection to an endpoint (in this case,
-  // localhost at port 50051). We indicate that the channel isn't authenticated
-  // (use of InsecureChannelCredentials()).
   GreeterClient greeter(grpc::CreateChannel(
       "localhost:50051", grpc::InsecureChannelCredentials()));
   std::string user("world");
-  std::string reply = greeter.SayHello(user);
+  std::string reply = greeter.SayHello(user, 10000, 10);
   std::cout << "Greeter received: " << reply << std::endl;
 
   return 0;
